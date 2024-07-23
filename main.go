@@ -9,17 +9,6 @@ import (
 	"strings"
 )
 
-// Define a list of templates
-//var templates = []string{
-//	"Every %a %n %v a %a %n in a %per %a %n.",
-//	"%a %n %v %n with %per %a %n.",
-//	"A %n only has %num %ns.",
-//	"In the %n, the %n %v %per.",
-//	"About %per of the %ns %vs %per of the time.",
-//	"%a %n %v %per of the %ns.",
-//	"A %n %v with %per %a %n.",
-//}
-
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   "yogev",
@@ -35,7 +24,6 @@ func main() {
 		},
 	}
 
-	// Add the fact command to the root command
 	rootCmd.AddCommand(factCmd)
 
 	if err := rootCmd.Execute(); err != nil {
@@ -76,19 +64,18 @@ func generateFact() {
 func randomLine(wordType string) string {
 	file, err := os.Open(fmt.Sprintf("./resources/%s/%s.txt", wordType, "english"))
 	if err != nil {
-		panic("Got an error. Very weird...")
+		panic("Got an error. Very weird..." + err.Error())
 	}
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			panic("Got an error. Very weird...")
+			panic("Got an error. Very weird..." + err.Error())
 		}
 	}(file)
 
 	lines, err := readLines(file)
 	if err != nil {
-		fmt.Println("Error reading lines:", err)
-		panic("Got an error. Very weird...")
+		panic("Got an error. Very weird..." + err.Error())
 	}
 	return lines[rand.Intn(len(lines))]
 }
