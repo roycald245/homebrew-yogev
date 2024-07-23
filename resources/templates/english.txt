@@ -1,0 +1,7 @@
+Every %a %n %v a %a %n in a %per %a %n.
+%a %n %v %n with %per %a %n.
+A %n only has %num %ns.
+In the %n, the %n %v %per.
+About %per of the %ns %vs %per of the time.
+%a %n %v %per of the %ns.
+A %n %v with %per %a %n.
