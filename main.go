@@ -2,12 +2,16 @@ package main
 
 import (
 	"bufio"
+	"embed"
 	"fmt"
 	"github.com/spf13/cobra"
 	"math/rand"
 	"os"
 	"strings"
 )
+
+//go:embed resources
+var f embed.FS
 
 func main() {
 	var rootCmd = &cobra.Command{
@@ -62,16 +66,10 @@ func generateFact() {
 }
 
 func randomLine(wordType string) string {
-	file, err := os.Open(fmt.Sprintf("./resources/%s/%s.txt", wordType, "english"))
+	file, err := f.ReadFile(fmt.Sprintf("resources/%s/%s.txt", wordType, "english"))
 	if err != nil {
 		panic("Got an error. Very weird..." + err.Error())
 	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			panic("Got an error. Very weird..." + err.Error())
-		}
-	}(file)
 
 	lines, err := readLines(file)
 	if err != nil {
@@ -80,9 +78,9 @@ func randomLine(wordType string) string {
 	return lines[rand.Intn(len(lines))]
 }
 
-func readLines(file *os.File) ([]string, error) {
+func readLines(file []byte) ([]string, error) {
 	var lines []string
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(strings.NewReader(string(file)))
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
